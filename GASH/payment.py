@@ -4,7 +4,6 @@ from GASH_login import Login
 from selenium.webdriver.support.ui import Select
 from CreditCard_payment import CreditCard
 
-import time
 
 def Payment(chrome):
     chrome.implicitly_wait(30)

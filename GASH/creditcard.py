@@ -4,7 +4,7 @@ from GASH_login import Login
 from selenium.webdriver.support.ui import Select
 from Bank_OTP import *
 
-import time
+
 
 
 def CreditCard(chrome):
@@ -19,13 +19,13 @@ def CreditCard(chrome):
     otpajax = chrome.find_element_by_id('otpajax')
     OTP = chrome.find_element_by_id('OTP')
 
-    cardType.select_by_value('Visa')
-    cardNumber.send_keys('4147635019822005')
-    expireMonth.select_by_value('10')
-    expireYear.select_by_value('2026')
-    CVN.send_keys('078')
-    firstName.send_keys('Yin')
-    lastName.send_keys('chialing')
+    cardType.select_by_value('//')
+    cardNumber.send_keys('//')
+    expireMonth.select_by_value('//')
+    expireYear.select_by_value('//')
+    CVN.send_keys('//')
+    firstName.send_keys('//')
+    lastName.send_keys('//')
     otpajax.click()
     OTP_name = input('')
     if OTP_name != '':
