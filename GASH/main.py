@@ -6,7 +6,6 @@ from setOTP import SetOTP
 def main():
    environment = "gash5400"
    driver = Actions(environment)
-   config = driver.config
    gash =BuyGash(driver)
    gash.buyGash()
    gash = Payment(driver)
