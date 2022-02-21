@@ -22,5 +22,3 @@ class BuyGash:
         self.driver.clickItem("//a[contains(text(),'進行結帳')]")
 
 
-        # Payment(chrome)
-

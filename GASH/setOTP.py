@@ -19,7 +19,7 @@ class SetOTP:
             #確認購買
             self.driver.findClass('btn.btn-block.btn-primary.mb-1')
 
-#def cathaybank_OTP(chrome):
+
 
 
 

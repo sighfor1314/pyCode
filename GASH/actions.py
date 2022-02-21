@@ -6,44 +6,40 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from os.path import dirname, join, abspath
-from selenium.webdriver.support.ui import Select
 import configparser     # for using .ini file
 import platform
 # for clearInput()
 from selenium.webdriver.chrome.options import Options
-
 # for monitoring http request/response
+
 class Actions:
     def __init__(self,environment):
+
         # options = webdriver.ChromeOptions()
-        # # 1. enable to capture network logs
-        # # options.add_experimental_option('perfLoggingPrefs', {'enableNetwork': True})
-        # # caps = DesiredCapabilities.CHROME
-        # # caps['goog:loggingPrefs'] = {'performance': 'ALL'}
-        # # 啟用 Chrome browser
+        # 1. enable to capture network logs
+        # options.add_experimental_option('perfLoggingPrefs', {'enableNetwork': True})
+        # caps = DesiredCapabilities.CHROME
+        # caps['goog:loggingPrefs'] = {'performance': 'ALL'}
+        # 啟用 Chrome browser
+
+        #設定chromedriver 路徑 此範例for mac
         webdriver_chrome_path = '/usr/local/bin/chromedriver'
         options = Options()
         options.add_argument("--disable-notifications")
-        self.driver = webdriver.Chrome('/usr/local/bin/chromedriver')
+        self.driver = webdriver.Chrome(webdriver_chrome_path)
         # self.driver = webdriver.Chrome(options=options)
-        #
 
-        # 開啟設定檔 account
+
+        # 開啟設定檔 account.ini
         ini_file_name = "account.ini"
         self.config = self.getConfig(ini_file_name)
-        # 前往 Gash
 
-
+        # 前往 Gash 網站
         self.gotoURL(self.config['WEBSITES'][environment])
-        # 等登入頁面出現，判斷 JarviX logo
-        # # self.waitUntilAppear("//img[@class='page-logo-img']")
 
-        # options = Options()
-        # options.add_argument("--disable-notifications")
-        # self.driver = webdriver.Chrome('chromedriver', chrome_options=options)
-        # self.driver.get(self.config['WEBSITES'][environment])
 
     def getConfig(self, ini_file_name):
         configuration = configparser.ConfigParser()
@@ -54,11 +50,12 @@ class Actions:
     def gotoURLDirect(self, URL):
         self.driver.get(URL)
 
-    # 前往頁面 environment = 'qa', ''
+    # 前往頁面 environment = 'gashxxx', ''
     def gotoURL(self, environment):
         environment = self.config['WEBSITES']['environment']
         website = self.config['WEBSITES'][environment]
         self.driver.get(website)
+
     # 移動游標
     def moveTo(self, xpath):
         ActionChains(self.driver).move_to_element(WebDriverWait(self.driver, 5).until(
@@ -74,19 +71,24 @@ class Actions:
             EC.presence_of_element_located((By.XPATH, xpath)))).perform()
         ActionChains(self.driver).click().perform()
         sleep(1)
+
+    #點選所有checkbox
     def clickCheckbox(self,name):
         checkboxs = self.driver.find_elements_by_class_name(name)
         for checkbox in checkboxs:
             checkbox.click()
             time.sleep(0.3)
 
+    #輸入欲選擇下拉式選單的值
     def selectValue(self, id, value):
         select = Select(self.driver.find_element_by_id(id))
         select.select_by_value(value)
 
+    # 輸入欲選擇下拉式選單的index
     def selectIndex(self,id,index):
         select = Select(self.driver.find_element_by_id(id))
         select.select_by_index(index)
+
     # 雙點擊 Item
     def doubleClickItem(self, xpath):
         ActionChains(self.driver).double_click(self.driver.find_element_by_xpath(xpath)).perform()
@@ -97,11 +99,16 @@ class Actions:
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.XPATH, xpath))).click()
         # sleep(1)
+
+    #設定重整頁面
     def refresh(self):
         self.driver.refresh()
+
+    #想要定位其中的iframe並切進去
     def switchFrame(self,frame):
         self.driver.switch_to.frame(frame)
 
+    #找class name並submit
     def findClass(self,class_name):
         self.driver.find_element_by_class_name(class_name).submit()
 
@@ -109,17 +116,19 @@ class Actions:
     def goBack(self):
         self.driver.back()
 
-    # 輸入
+    # 定位xpath輸入content
     def inputXpath(self, xpath, content):
         self.driver.find_element_by_xpath(xpath).send_keys(content)
 
+    # 定位id 輸入content
     def inputID(self, id, content):
         self.driver.find_element_by_id(id).send_keys(content)
 
+    # 定位name 輸入content
     def inputName(self, name, content):
         self.driver.find_element_by_id(name).send_keys(content)
 
-
+    #清除input
     def clearInput(self, xpath):
         sleep(0.1)
         # 取得 input 當前內容，若有 value 則清空
